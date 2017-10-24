@@ -1,6 +1,6 @@
 {
     "name": "SurfaceOwnerLib",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "title": "SurfaceOwnerLib",
     "author": "BeefEX",
     "description": "Library providing an intermod database of mods owning certain surfaces.",
