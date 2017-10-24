@@ -1,0 +1,11 @@
+{
+    "name": "SurfaceOwnerLib",
+    "version": "0.1.0",
+    "title": "SurfaceOwnerLib",
+    "author": "BeefEX",
+    "description": "Library providing an intermod database of mods owning certain surfaces.",
+    "factorio_version": "0.15",
+    "dependencies": [
+        "base >= 0.15.13"
+    ]
+}
