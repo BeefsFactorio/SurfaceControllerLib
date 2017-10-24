@@ -1,5 +1,5 @@
 -- Default general surface owner
-remote.add_interface( default_owner_interface_name, {
+remote.add_interface( "default_general_surface_interface", {
     get_owner_mod = function ( )
         return "unknown"
     end
@@ -14,7 +14,10 @@ local function init(  )
     -- Name of the surface that is currently getting created by the library, needed to ignore the creation event of it.
     global.currently_processing_surface = ""
 
-    global.default_owner_interface = {}
+    -- Default owners
+    global.default_owner_interface = {
+        general = "default_general_surface_interface"
+    }
 end
 
 -- Interface housing all functions of this library.
