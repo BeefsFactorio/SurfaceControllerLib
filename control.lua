@@ -20,17 +20,7 @@ end
 -- Interface housing all functions of this library.
 remote.add_interface( "surface_owner", {
 
-    -- Custom wrapper around `game.create_surface` method which also registers the owning mod.
-    create_surface = function ( owner_interface_name, surface_name, surface_options )
-        global.currently_processing_surface = surface_name
-
-        surface = game.create_surface( surface_name, surface_options )
-
-        global.surface_owners[surface.index] = owner_interface_name
-
-        return surface
-    end,
-
+    -- Retrieves owner of a surface for a given category.
     retrieve_owner = function ( surface, category )
         local surface_index = 0
 
@@ -49,7 +39,8 @@ remote.add_interface( "surface_owner", {
         return global.surface_owners[surface_index][category]
     end,
 
-    get_list_of_owners = function ( surface )
+    -- Retrieves list of owner categories given surface contains.
+    list_owner_categories = function ( surface )
         local surface_index = 0
         
         if type(surface) == "number" then
@@ -73,6 +64,7 @@ remote.add_interface( "surface_owner", {
         return keys
     end,
 
+    -- Used to assing owner to a category of a given surface.
     assign_owner = function ( surface, owner_category, owner_interface_name )
         local surface_index = 0
         
@@ -91,6 +83,7 @@ remote.add_interface( "surface_owner", {
         global.surface_owners[surface_index][owner_category] = owner_interface_name
     end,
 
+    -- Used to set default owner for given category.
     set_default_owner = function ( owner_category, owner_interface_name )
         global.default_owner_interface[owner_category] = owner_interface_name
     end,
