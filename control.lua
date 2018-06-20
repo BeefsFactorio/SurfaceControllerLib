@@ -124,3 +124,6 @@ end
 -- Listening to surface related events.
 script.on_event(defines.events.on_surface_created, on_surface_created)
 script.on_event(defines.events.on_surface_deleted, on_surface_deleted)
+
+-- Listen for initialization event
+script.on_init(init)
