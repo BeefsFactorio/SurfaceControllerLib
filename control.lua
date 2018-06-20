@@ -1,6 +1,8 @@
+local default_general_surface_interface_name = "default_general_surface_interface"
+
 -- Default general surface controller
 remote.add_interface(
-	"default_general_surface_interface",
+	default_general_surface_interface_name,
 	{
 		get_controller_mod = function()
 			return "unknown"
@@ -18,7 +20,7 @@ local function init()
 
 	-- Default controllers
 	global.default_controller_interface = {
-		general = "default_general_surface_interface"
+		general = default_general_surface_interface_name
 	}
 end
 
@@ -31,6 +33,7 @@ remote.add_interface(
 		retrieve_controller = function(surface, category)
 			local surface_index = 0
 
+			-- Resolving the actual surface index
 			if type(surface) == "number" then
 				surface_index = surface
 			elseif type(surface) == "string" then
@@ -39,6 +42,7 @@ remote.add_interface(
 				return nil
 			end
 
+			-- Retirning nil if the surface isn't registred at all
 			if not global.surface_controllers[surface_index] then
 				return nil
 			end
@@ -50,6 +54,7 @@ remote.add_interface(
 		list_controller_categories = function(surface)
 			local surface_index = 0
 
+			-- Resolving the actual surface index
 			if type(surface) == "number" then
 				surface_index = surface
 			elseif type(surface) == "string" then
@@ -61,10 +66,12 @@ remote.add_interface(
 				return nil
 			end
 
+			-- Returning nil if the surface isn't registred at all
 			if not global.surface_controllers[surface_index] then
 				return nil
 			end
 
+			-- Creating a list of all controllers assigned
 			local keys = {}
 
 			for key, _ in pairs(global.surface_controllers) do
@@ -73,10 +80,12 @@ remote.add_interface(
 
 			return keys
 		end,
+		--
 		-- Used to assing controller to a category of a given surface.
 		assign_controller = function(surface, controller_category, controller_interface_name)
 			local surface_index = 0
 
+			-- Resolving the actual surface index
 			if type(surface) == "number" then
 				surface_index = surface
 			elseif type(surface) == "string" then
@@ -85,12 +94,15 @@ remote.add_interface(
 				return nil
 			end
 
+			-- Creating the surface table if not created already.
 			if not global.surface_controllers[surface_index] then
 				global.surface_controllers[surface_index] = {}
 			end
 
+			-- The actual assignment
 			global.surface_controllers[surface_index][controller_category] = controller_interface_name
 		end,
+		--
 		-- Used to set default controller for given category.
 		set_default_controller = function(controller_category, controller_interface_name)
 			global.default_controller_interface[controller_category] = controller_interface_name
@@ -100,8 +112,10 @@ remote.add_interface(
 
 -- Used to register the default controller for surfaces creating using the standard way (`game.create_surface`).
 local function on_surface_created(event)
-	if not game.surfaces[event.surface_index].name == global.currently_processing_surface then
-		global.surface_controllers[event.surface_index] = global.default_controller_interface
+	--
+	-- Add all default controllers
+	for category, interface in pairs(global.default_controller_interface) do
+		remote.call("surface_controller", "assign_controller", event.surface_index, category, interface)
 	end
 end
 
@@ -110,5 +124,6 @@ local function on_surface_deleted(event)
 	global.surface_controllers[event.surface_index] = nil
 end
 
+-- Listening to surface related events.
 script.on_event(defines.events.on_surface_created, on_surface_created)
 script.on_event(defines.events.on_surface_deleted, on_surface_deleted)
