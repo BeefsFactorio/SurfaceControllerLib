@@ -12,11 +12,8 @@ remote.add_interface(
 
 -- Initializes all global variables of this mod.
 local function init()
-	-- Table mapping surface index to interface name of the mod owning it.
+	-- Table mapping surface index to categories and interface names of the controllers.
 	global.surface_controllers = {}
-
-	-- Name of the surface that is currently getting created by the library, needed to ignore the creation event of it.
-	global.currently_processing_surface = ""
 
 	-- Default controllers
 	global.default_controller_interface = {
